@@ -1,0 +1,20 @@
+{% extends 'dashboardadminapp/base.html' %}  <!-- ✅ Use correct path -->
+
+{% block title %}Add User{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Add New User</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Add User</button>
+    </form>
+
+    {% for message in messages %}
+        <div class="alert alert-info mt-3">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endblock %}
