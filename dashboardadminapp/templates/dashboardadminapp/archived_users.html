@@ -1,0 +1,42 @@
+{% extends 'dashboardadminapp/base.html' %}
+
+{% block title %}Archived Users{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Archived Users</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Middle Initial</th>
+                <th>User Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.middle_initial }}</td>
+                <td>{{ user.user_number }}</td>
+                <td>
+                    <a href="{% url 'dashboardadminapp:restore_user' user.id %}" class="btn btn-success btn-sm">
+                        Restore
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No archived users found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'dashboardadminapp:list_users' %}" class="btn btn-primary">Back to Users</a>
+</div>
+{% endblock %}

@@ -1,4 +1,3 @@
-<!-- list_users.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +9,13 @@
 <body>
     <div class="container mt-5">
         <h2 class="text-center">List of Users</h2>
+
+        <!-- ✅ Button to View Archived Users -->
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{% url 'dashboardadminapp:add_user' %}" class="btn btn-success">Add User</a>
+            <a href="{% url 'dashboardadminapp:archived_users' %}" class="btn btn-secondary">View Archived Users</a>
+        </div>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -18,27 +24,57 @@
                     <th>First Name</th>
                     <th>Middle Initial</th>
                     <th>User Number</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
-                <tr>
+                <tr id="user-row-{{ user.id }}">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user.first_name }}</td>
                     <td>{{ user.middle_initial }}</td>
                     <td>{{ user.user_number }}</td>
+                    <td>
+                        <a href="{% url 'dashboardadminapp:edit_user' user.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'dashboardadminapp:archive_user' user.id %}" 
+                           class="btn btn-danger btn-sm archive-btn"
+                           data-user-id="{{ user.id }}">
+                           Archive
+                        </a>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center">No users found.</td>
+                    <td colspan="6" class="text-center">No active users found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
-        <a href="{% url 'dashboardadminapp:dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
-    </div>
+            
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll(".archive-btn").forEach(button => {
+                    button.addEventListener("click", function(event) {
+                        event.preventDefault();  // Prevent page reload
+                        
+                        let userId = this.getAttribute("data-user-id");
+                        let row = document.getElementById("user-row-" + userId);
+                        let archiveUrl = this.href;
+            
+                        // ✅ Show confirmation alert before archiving
+                        if (confirm("Are you sure you want to archive this user?")) {
+                            fetch(archiveUrl, { method: "GET" })
+                            .then(response => {
+                                if (response.ok) {
+                                    row.remove();  // ✅ Remove the user row instantly
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            </script>
+            
 </body>
 </html>
 
-</html>

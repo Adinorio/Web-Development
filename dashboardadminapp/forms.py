@@ -4,4 +4,4 @@ from .models import SuperAdminUser
 class AddUserForm(forms.ModelForm):
     class Meta:
         model = SuperAdminUser
-        fields = ['lastname', 'firstname', 'middle_initial']
+        fields = ['last_name', 'first_name', 'middle_initial']

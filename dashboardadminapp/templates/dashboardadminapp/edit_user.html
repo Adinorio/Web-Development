@@ -1,0 +1,17 @@
+{% extends 'dashboardadminapp/base.html' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Edit User</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Update User</button>
+        <a href="{% url 'dashboardadminapp:list_users' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

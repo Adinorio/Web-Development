@@ -13,12 +13,14 @@ class SuperAdminUserManager(BaseUserManager):
         return user
 
 class SuperAdminUser(models.Model):
-    lastname = models.CharField(max_length=50)
-    firstname = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50)
     middle_initial = models.CharField(max_length=5, blank=True, null=True)
-    user_number = models.CharField(max_length=20, unique=True)  # ✅ Year/001/random format
-    password = models.CharField(max_length=255, default="Avicast123")  # ✅ Default password
+    user_number = models.CharField(max_length=20, unique=True)
+    password = models.CharField(max_length=255, default="Avicast123")
+    is_archived = models.BooleanField(default=False)  # ✅ Archive feature
 
     def __str__(self):
-        return f"{self.lastname}, {self.firstname}"
+        return f"{self.last_name}, {self.first_name}"
+
 
