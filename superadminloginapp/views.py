@@ -16,16 +16,16 @@ def login_view(request):
 
             # Superadmin check (user_id = "010101")
             if user_id == "010101":
-                try:
-                    superadmin = User.objects.get(user_id=user_id)
-                    if check_password(password, superadmin.password):
-                        # Redirect to superadmin's dashboard (dashboardadminapp)
-                        return redirect("dashboardadminapp:dashboard")  # Superadmin Dashboard
-                    else:
-                        error_message = "Invalid password"
-                except User.DoesNotExist:
-                    error_message = "Superadmin user not found"
+                # Try to get the superadmin user, create it if it does not exist
+                superadmin = User.objects.filter(user_id=user_id).first()
+                if not superadmin:
+                    superadmin = User.create_default_user()
 
+                if check_password(password, superadmin.password):
+                    # Redirect to superadmin's dashboard (dashboardadminapp)
+                    return redirect("dashboardadminapp:dashboard")  # Superadmin Dashboard
+                else:
+                    error_message = "Invalid password"
             else:
                 # Check if user_id is a custom_user_id in UserProfile (for regular admins)
                 try:
@@ -37,7 +37,6 @@ def login_view(request):
                         error_message = "Invalid password"
                 except UserProfile.DoesNotExist:
                     error_message = "User not found"
-
     else:
         form = LoginForm()
 
@@ -46,4 +45,4 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)  # This logs out the user
-    return redirect('/superadminloginapp/login/') 
+    return redirect('/superadminloginapp/login/')
